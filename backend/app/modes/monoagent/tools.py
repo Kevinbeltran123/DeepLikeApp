@@ -15,9 +15,6 @@ from app.domain.languages import LANGUAGES
 from app.infrastructure.detection.language_detector import detect_language_code
 
 
-# TODO(student): extend or refine these dictionaries with terms that matter for
-# your translation use case. The mono-agent decides whether to call this tool
-# based on its docstring, but once called, what it FINDS depends on these lists.
 _DOMAIN_TERMS: dict[str, list[str]] = {
     "medical": [
         "diagnosis", "syndrome", "chronic", "acute", "therapy", "dosage",
@@ -119,9 +116,6 @@ def check_translation_quality(input: str) -> str:
     {"original": "...", "translation": "..."}.
     Verifies the translation is non-empty, not identical to the original, and within a
     reasonable length range. Use this AFTER translating to confirm the result."""
-    # TODO(student): tune these thresholds. 0.2 and 5.0 are conservative defaults.
-    # Languages with high information density (Chinese, Japanese) can produce ratios
-    # well outside [0.2, 5.0] without being wrong, so consider per-language ratios.
     args = _parse_json_input(input, ["original", "translation"])
     original, translation = str(args["original"]), str(args["translation"])
 

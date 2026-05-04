@@ -8,9 +8,6 @@ without requiring the translator to know about every domain in advance.
 from .base import AgentResult
 
 
-# TODO(student): expand these dictionaries to cover the domains your translations
-# actually deal with. Add new keys here and the agent will detect them with no
-# other code changes. Consider adding "scientific", "marketing", "literary", etc.
 _DOMAINS: dict[str, list[str]] = {
     "medical":   ["diagnosis", "syndrome", "therapy", "dosage", "chronic", "acute",
                   "diagnostico", "sindrome", "terapia", "dosis", "cronico", "agudo"],

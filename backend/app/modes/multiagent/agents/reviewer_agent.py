@@ -20,10 +20,6 @@ from app.config import get_settings
 from .base import AgentResult
 
 
-# TODO(student): these thresholds determine when the reviewer flags a translation
-# as suspicious without invoking the LLM. They are intentionally conservative.
-# Lower _MIN_LENGTH_RATIO if you translate to dense languages (Chinese, Japanese);
-# raise _MAX_LENGTH_RATIO if you translate from them.
 _MIN_LENGTH_RATIO = 0.15
 _MAX_LENGTH_RATIO = 6.0
 

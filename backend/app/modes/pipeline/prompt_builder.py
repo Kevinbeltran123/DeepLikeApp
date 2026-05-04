@@ -7,11 +7,6 @@ no quality check. Everything that controls translation behavior lives here.
 from app.domain.languages import english_name
 
 
-# TODO(student): tune this prompt to match the translation style you want.
-# Things worth experimenting with:
-#   - Register: formal vs neutral vs casual
-#   - Strictness: "no explanations" vs "add a footnote when ambiguous"
-#   - Domain hints: prepend a domain ("medical", "legal") if your use case is narrow
 _TEMPLATE = """You are an expert professional translator specializing in accurate, natural-sounding translations.
 
 Translate the following {source_name} text into {target_name}.

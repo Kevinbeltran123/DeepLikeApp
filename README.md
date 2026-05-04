@@ -159,24 +159,6 @@ curl -N -X POST http://localhost:8000/api/multiagent/translate \
 
 ---
 
-## Personalización
-
-Hay tres puntos donde tu criterio cambia el comportamiento (todos marcados con `TODO(student)` en el código):
-
-1. **Prompts del traductor** — registro formal/casual, estricto/permisivo
-   - `backend/app/modes/pipeline/prompt_builder.py`
-   - `backend/app/modes/multiagent/agents/translator_agent.py`
-
-2. **Diccionarios de dominio** — qué dominios y términos identifica el `Terminologo`
-   - `backend/app/modes/multiagent/agents/terminology_agent.py`
-   - `backend/app/modes/monoagent/tools.py` (`_DOMAIN_TERMS`)
-
-3. **Umbrales de calidad** — qué considera "traducción aceptable" el revisor
-   - `backend/app/modes/multiagent/agents/reviewer_agent.py` (`_MIN_LENGTH_RATIO`, `_MAX_LENGTH_RATIO`)
-   - `backend/app/modes/monoagent/tools.py` (`check_translation_quality`)
-
----
-
 ## Variables de entorno
 
 `backend/.env`:
