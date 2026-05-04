@@ -1,19 +1,61 @@
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+.eggs/
+build/
+develop-eggs/
+sdist/
+wheels/
+
+# Virtual environments
 .venv/
 venv/
 env/
+ENV/
+
+# Test / coverage / type-check caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# Environment files
 .env
 .env.local
+.env.*.local
 
+# Node / Vite
 node_modules/
 dist/
+dist-ssr/
 .vite/
-.DS_Store
+*.local
+*.tsbuildinfo
 
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
 .idea/
 .vscode/
+!.vscode/extensions.json
 *.swp
 *.swo
+*.swn
+
+# Misc
+/tmp/
+*.bak
