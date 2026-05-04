@@ -7,22 +7,27 @@ interface Props {
   disabled?: boolean;
 }
 
-export const ModeSelector = ({ modes, active, onChange, disabled }: Props) => (
-  <div className="mode-selector" role="tablist">
-    {modes.map((mode) => (
-      <button
-        key={mode.id}
-        type="button"
-        role="tab"
-        aria-selected={mode.id === active}
-        className={`mode-tab ${mode.id === active ? 'active' : ''}`}
-        onClick={() => onChange(mode.id)}
-        disabled={disabled}
-        title={mode.description}
-      >
-        <span className="mode-tab-name">{mode.name}</span>
-        <span className="mode-tab-desc">{mode.description}</span>
-      </button>
-    ))}
-  </div>
-);
+export const ModeSelector = ({ modes, active, onChange, disabled }: Props) => {
+  const activeMode = modes.find((m) => m.id === active);
+
+  return (
+    <div className="mode-selector">
+      <div className="mode-pills" role="tablist">
+        {modes.map((mode) => (
+          <button
+            key={mode.id}
+            type="button"
+            role="tab"
+            aria-selected={mode.id === active}
+            className={`mode-pill ${mode.id === active ? 'active' : ''}`}
+            onClick={() => onChange(mode.id)}
+            disabled={disabled}
+          >
+            {mode.name}
+          </button>
+        ))}
+      </div>
+      {activeMode && <p className="mode-description">{activeMode.description}</p>}
+    </div>
+  );
+};

@@ -58,17 +58,24 @@ const App = () => {
     <div className="app">
       <header className="app-header">
         <div>
-          <h1>DeepLikeApp</h1>
+          <h1>
+            DeepLikeApp
+            {health && (
+              <span
+                className={`health-dot-inline ${health.ollama_reachable ? 'ok' : 'down'}`}
+                title={
+                  health.ollama_reachable
+                    ? `Ollama conectado · ${health.model}`
+                    : 'Ollama no disponible'
+                }
+                aria-label={health.ollama_reachable ? 'Backend conectado' : 'Backend no disponible'}
+              />
+            )}
+          </h1>
           <p className="subtitle">
             Traductor estilo DeepL con tres arquitecturas comparables: pipeline, mono-agente y multi-agente.
           </p>
         </div>
-        {health && (
-          <div className={`health-badge ${health.ollama_reachable ? 'ok' : 'down'}`}>
-            <span className="health-dot" />
-            <span>{health.ollama_reachable ? `Ollama OK -- ${health.model}` : 'Ollama no disponible'}</span>
-          </div>
-        )}
       </header>
 
       <ModeSelector
@@ -136,12 +143,16 @@ const App = () => {
           <AgentTrace
             trace={state.trace}
             variant={activeMode === 'monoagent' ? 'monoagent' : 'multiagent'}
+            status={state.status}
           />
         </section>
       )}
 
       <footer className="app-footer">
-        <span>Backend: FastAPI + Ollama</span>
+        <span>
+          Backend: FastAPI + Ollama
+          {health && ` · ${health.ollama_reachable ? 'conectado' : 'offline'}`}
+        </span>
         <span>Modelo: {health?.model ?? 'qwen2.5:14b'}</span>
         <span>Cmd/Ctrl + Enter para traducir</span>
       </footer>

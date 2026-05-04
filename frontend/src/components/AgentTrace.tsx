@@ -1,34 +1,18 @@
 import type { TraceEntry } from '../hooks/useTranslationStream';
 import { Icon } from './icons';
+import { OrchestratorSubway } from './OrchestratorSubway';
+import { ReactTerminal } from './ReactTerminal';
 
 interface Props {
   trace: TraceEntry[];
   variant: 'monoagent' | 'multiagent';
+  status: 'idle' | 'streaming' | 'done' | 'error';
 }
 
-export const AgentTrace = ({ trace, variant }: Props) => {
-  if (trace.length === 0) {
-    return (
-      <div className="agent-trace empty">
-        <span className="placeholder">
-          {variant === 'monoagent'
-            ? 'El bucle ReAct del agente aparecera aqui...'
-            : 'Los pasos de los agentes apareceran aqui...'}
-        </span>
-      </div>
-    );
-  }
-
-  return (
-    <ol className="agent-trace">
-      {trace.map((entry, idx) => (
-        <li key={idx} className={`trace-entry trace-${entry.kind}`}>
-          <TraceItem entry={entry} />
-        </li>
-      ))}
-    </ol>
-  );
-};
+export const AgentTrace = ({ trace, variant, status }: Props) =>
+  variant === 'multiagent'
+    ? <OrchestratorSubway trace={trace} />
+    : <ReactTerminal trace={trace} status={status} />;
 
 const TraceItem = ({ entry }: { entry: TraceEntry }) => {
   switch (entry.kind) {

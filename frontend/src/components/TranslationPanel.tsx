@@ -5,24 +5,21 @@ interface Props {
   status: 'idle' | 'streaming' | 'done' | 'error';
 }
 
-export const TranslationPanel = ({ translation, detectedLang, isStreaming, status }: Props) => (
+export const TranslationPanel = ({ translation, isStreaming }: Props) => (
   <div className="panel translation-panel">
-    {detectedLang && (
-      <div className="detected-lang">
-        Origen detectado: <strong>{detectedLang.display}</strong>
-      </div>
-    )}
     <div className={`translation-output ${isStreaming ? 'streaming' : ''}`}>
-      {translation || <span className="placeholder">La traduccion aparecera aqui...</span>}
-      {isStreaming && <span className="cursor">|</span>}
-    </div>
-    <div className="panel-footer">
-      <span className="status-pill" data-status={status}>
-        {status === 'idle' && 'Listo'}
-        {status === 'streaming' && 'Traduciendo...'}
-        {status === 'done' && 'Completado'}
-        {status === 'error' && 'Error'}
-      </span>
+      {!translation && !isStreaming && (
+        <span className="placeholder">La traducción aparecerá aquí…</span>
+      )}
+      {!translation && isStreaming && (
+        <span className="translating">Traduciendo</span>
+      )}
+      {translation && (
+        <>
+          {translation}
+          {isStreaming && <span className="cursor">|</span>}
+        </>
+      )}
     </div>
   </div>
 );

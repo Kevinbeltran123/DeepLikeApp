@@ -17,11 +17,11 @@ class Language:
 
 
 LANGUAGES: dict[str, Language] = {
-    "es": Language("es", "Espanol", "Spanish"),
+    "es": Language("es", "Español", "Spanish"),
     "en": Language("en", "English", "English"),
-    "fr": Language("fr", "Francais", "French"),
+    "fr": Language("fr", "Français", "French"),
     "de": Language("de", "Deutsch", "German"),
-    "pt": Language("pt", "Portugues", "Portuguese"),
+    "pt": Language("pt", "Português", "Portuguese"),
     "it": Language("it", "Italiano", "Italian"),
     "zh-cn": Language("zh-cn", "Chinese", "Chinese"),
     "ja": Language("ja", "Japanese", "Japanese"),
