@@ -30,27 +30,49 @@ interface Step {
   tool: string;
   icon: string;
   input: string;
+  thoughts: string[];
+  warnings: string[];
   observation?: string;
-  status: 'doing' | 'done';
+  status: 'thinking' | 'doing' | 'done';
 }
+
+const ensureStep = (steps: Step[], step: number): Step => {
+  let target = steps.find((s) => s.step === step);
+  if (!target) {
+    target = {
+      step,
+      tool: '',
+      icon: 'spark',
+      input: '',
+      thoughts: [],
+      warnings: [],
+      status: 'thinking',
+    };
+    steps.push(target);
+    steps.sort((a, b) => a.step - b.step);
+  }
+  return target;
+};
 
 const groupSteps = (trace: TraceEntry[]): Step[] => {
   const result: Step[] = [];
   for (const e of trace) {
-    if (e.kind === 'action') {
-      result.push({
-        step: e.step,
-        tool: e.tool,
-        icon: e.icon,
-        input: e.input,
-        status: 'doing',
-      });
+    if (e.kind === 'thought') {
+      const target = ensureStep(result, e.step);
+      target.thoughts.push(e.content);
+    } else if (e.kind === 'warning') {
+      const target = ensureStep(result, e.step || 1);
+      target.warnings.push(e.message);
+    } else if (e.kind === 'action') {
+      const target = ensureStep(result, e.step);
+      target.tool = e.tool;
+      target.icon = e.icon;
+      target.input = e.input;
+      target.status = 'doing';
     } else if (e.kind === 'observation') {
-      const target = result.find((s) => s.step === e.step);
-      if (target) {
-        target.observation = e.result;
-        target.status = 'done';
-      }
+      const target = ensureStep(result, e.step);
+      target.observation = e.result;
+      target.status = 'done';
     }
   }
   return result;
@@ -125,7 +147,7 @@ const useAnimatedPhase = (trace: TraceEntry[]): PhaseId | null => {
     for (let i = lastSeenRef.current; i < trace.length; i++) {
       const e = trace[i];
       const tail = queueRef.current[queueRef.current.length - 1];
-      if (e.kind === 'start') {
+      if (e.kind === 'start' || e.kind === 'thought') {
         if (tail !== 'think') queueRef.current.push('think');
       } else if (e.kind === 'action') {
         if (tail !== 'act') queueRef.current.push('act');
@@ -231,22 +253,44 @@ const ArrowOnRing = ({ angleDeg }: { angleDeg: number }) => {
   );
 };
 
+const STATUS_LABEL: Record<Step['status'], string> = {
+  thinking: 'pensando',
+  doing: 'esperando observación',
+  done: 'listo',
+};
+
 const StepCard = ({ step }: { step: Step }) => (
   <div className={`loop-step ${step.status}`}>
     <div className="loop-step-header">
       <span className="loop-step-num">#{step.step}</span>
       <span className="loop-step-tool">
         <Icon name={step.icon} />
-        <span>{step.tool}</span>
+        <span>{step.tool || '—'}</span>
       </span>
-      <span className={`loop-step-status ${step.status}`}>
-        {step.status === 'doing' ? 'esperando observación' : 'listo'}
-      </span>
+      <span className={`loop-step-status ${step.status}`}>{STATUS_LABEL[step.status]}</span>
     </div>
-    <div className="loop-step-row">
-      <span className="loop-step-row-label">input</span>
-      <code className="loop-step-row-value code">{step.input}</code>
-    </div>
+    {step.thoughts.length > 0 && (
+      <div className="loop-step-row">
+        <span className="loop-step-row-label">thought</span>
+        <div className="loop-step-row-value">
+          {step.thoughts.map((t, i) => (
+            <div key={i} className="loop-step-thought">{t}</div>
+          ))}
+        </div>
+      </div>
+    )}
+    {step.warnings.map((w, i) => (
+      <div key={`w-${i}`} className="loop-step-row loop-step-warning">
+        <span className="loop-step-row-label">warning</span>
+        <span className="loop-step-row-value">{w}</span>
+      </div>
+    ))}
+    {step.tool && (
+      <div className="loop-step-row">
+        <span className="loop-step-row-label">input</span>
+        <code className="loop-step-row-value code">{step.input}</code>
+      </div>
+    )}
     {step.observation !== undefined && (
       <div className="loop-step-row">
         <span className="loop-step-row-label">output</span>

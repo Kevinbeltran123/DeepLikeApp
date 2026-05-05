@@ -4,6 +4,8 @@ import type {
   AgentDoneEvent,
   AgentObservationEvent,
   AgentStartEvent,
+  AgentThoughtEvent,
+  AgentWarningEvent,
   ModeId,
   StreamEvent,
   TranslateRequest,
@@ -14,6 +16,8 @@ export type TraceEntry =
   | (AgentStartEvent & { kind: 'start' })
   | (AgentActionEvent & { kind: 'action' })
   | (AgentObservationEvent & { kind: 'observation' })
+  | (AgentThoughtEvent & { kind: 'thought' })
+  | (AgentWarningEvent & { kind: 'warning' })
   | (AgentDoneEvent & { kind: 'done' });
 
 export interface TranslationState {
@@ -84,6 +88,10 @@ const applyEvent = (state: TranslationState, event: StreamEvent): TranslationSta
       return { ...state, trace: [...state.trace, { ...event, kind: 'action' }] };
     case 'agent_observation':
       return { ...state, trace: [...state.trace, { ...event, kind: 'observation' }] };
+    case 'agent_thought':
+      return { ...state, trace: [...state.trace, { ...event, kind: 'thought' }] };
+    case 'agent_warning':
+      return { ...state, trace: [...state.trace, { ...event, kind: 'warning' }] };
     case 'agent_done':
       return { ...state, trace: [...state.trace, { ...event, kind: 'done' }] };
     case 'final':

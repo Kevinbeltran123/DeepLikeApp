@@ -42,6 +42,20 @@ class AgentObservationEvent(TypedDict):
     result: str
 
 
+class AgentThoughtEvent(TypedDict):
+    """Mono-agent ReAct: the model's reasoning before picking a tool."""
+    type: Literal["agent_thought"]
+    step: int
+    content: str
+
+
+class AgentWarningEvent(TypedDict):
+    """Mono-agent ReAct: a recoverable problem (parsing error, retry, ...)."""
+    type: Literal["agent_warning"]
+    step: int
+    message: str
+
+
 class AgentDoneEvent(TypedDict):
     """Multi-agent: a specialized agent finished its step."""
     type: Literal["agent_done"]

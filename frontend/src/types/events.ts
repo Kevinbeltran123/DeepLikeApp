@@ -44,6 +44,18 @@ export interface AgentObservationEvent {
   result: string;
 }
 
+export interface AgentThoughtEvent {
+  type: 'agent_thought';
+  step: number;
+  content: string;
+}
+
+export interface AgentWarningEvent {
+  type: 'agent_warning';
+  step: number;
+  message: string;
+}
+
 export interface AgentDoneEvent {
   type: 'agent_done';
   agent: string;
@@ -69,6 +81,8 @@ export type StreamEvent =
   | AgentStartEvent
   | AgentActionEvent
   | AgentObservationEvent
+  | AgentThoughtEvent
+  | AgentWarningEvent
   | AgentDoneEvent
   | FinalEvent
   | ErrorEvent;

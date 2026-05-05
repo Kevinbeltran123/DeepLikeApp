@@ -985,8 +985,25 @@ button:disabled {
   color: var(--text-muted);
 }
 
+.loop-step.thinking { border-color: var(--text-muted); border-style: dashed; }
+.loop-step-status.thinking { color: var(--text-muted); }
 .loop-step-status.doing { color: var(--accent); }
 .loop-step-status.done  { color: var(--accent); }
+
+.loop-step-thought {
+  font-style: italic;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.03);
+  padding: 0.3rem 0.5rem;
+  border-left: 2px solid var(--accent);
+  border-radius: 2px;
+  margin-bottom: 0.25rem;
+}
+
+.loop-step-warning .loop-step-row-label,
+.loop-step-warning .loop-step-row-value {
+  color: #b15a00;
+}
 
 .loop-step-row {
   display: grid;
