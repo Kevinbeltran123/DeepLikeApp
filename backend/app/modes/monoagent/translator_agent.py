@@ -117,54 +117,6 @@ def _sse(payload: dict) -> str:
     return f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
 
 
-# ---------------------------------------------------------------------------
-# TODO(tú): implementar _extract_thoughts
-# ---------------------------------------------------------------------------
-# Esta es LA decisión que define el feel del agente en vivo.
-#
-# Contexto:
-#   on_chat_model_stream nos entrega el texto del LLM en chunks pequeños
-#   (a veces tokens sueltos, a veces frases completas). Lo vamos acumulando en
-#   un buffer. Tu trabajo es sacar de ese buffer las "Thoughts" terminadas y
-#   devolver el resto para que se siga acumulando.
-#
-# Una Thought se ve así dentro del buffer:
-#
-#   "Thought: Necesito detectar el idioma primero.\nAction: detect_language\n..."
-#
-#   Empieza con el literal "Thought:" y termina cuando aparece "\nAction:" o
-#   "\nFinal Answer:" — eso significa que el modelo dejó de pensar y pasó a
-#   actuar (o a entregar el resultado).
-#
-# Trade-offs a considerar:
-#   - Si emites cada chunk parcial como Thought, el UI vibra muy rápido pero
-#     se ve "vivo". Si esperas a tener la Thought completa, es más limpio
-#     pero el usuario espera más entre eventos.
-#   - Una sola Thought, varias Thoughts en el mismo buffer, o ninguna —
-#     todos son posibles dependiendo de qué tan rápido te llamen.
-#   - "Final Answer:" también cierra una Thought (el modelo termina de pensar
-#     y entrega resultado).
-#
-# Firma:
-#   Input:  buffer acumulado de texto crudo del LLM
-#   Output: (lista de Thoughts completas como strings, buffer restante por procesar)
-#
-# Ejemplo:
-#   _extract_thoughts("Thought: Detecto idioma.\nAction: detect_language\nAction Input: hola")
-#     -> (["Detecto idioma."], "Action: detect_language\nAction Input: hola")
-#
-#   _extract_thoughts("Thought: Sigo pensan")
-#     -> ([], "Thought: Sigo pensan")        # incompleta, no emitir
-#
-#   _extract_thoughts("hola sin marcadores")
-#     -> ([], "hola sin marcadores")          # nada que emitir
-#
-# Pista: re.search con un patrón "Thought:(.*?)(\\n\\s*(?:Action|Final Answer):)"
-# en modo DOTALL te resuelve casi todo. Recuerda devolver el buffer "podado".
-# Implementa abajo.
-# ---------------------------------------------------------------------------
-
-
 _THOUGHT_PATTERN = re.compile(
     r"Thought:\s*(.*?)(?=\n\s*(?:Action|Final Answer):)",
     re.DOTALL,
